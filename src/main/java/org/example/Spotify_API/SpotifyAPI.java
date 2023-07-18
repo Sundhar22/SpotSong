@@ -1,2 +1,4 @@
-package org.example.Spotify_API;public class SpotifyAPI {
+package org.example.Spotify_API;
+
+public class SpotifyAPI {
 }
