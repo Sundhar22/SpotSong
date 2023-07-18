@@ -19,11 +19,12 @@ public class App {
         YoutubeDownloader downloader = new YoutubeDownloader();
 
 
-        String videoId = "RzmZmaQtxls";
+        String videoId = "1F3hm6MfR1k";
 
-// sync parsing
+        // sync parsing
         RequestVideoInfo request = new RequestVideoInfo(videoId);
         Response<VideoInfo> response = downloader.getVideoInfo(request);
+
         VideoInfo video = response.data();
 
 
@@ -52,11 +53,13 @@ public class App {
                 .callback(new YoutubeProgressCallback<File>() {
                     @Override
                     public void onDownloading(int progress) {
+
                         System.out.printf("Downloaded %d%%\n", progress);
                     }
 
                     @Override
                     public void onFinished(File videoInfo) {
+
                         System.out.println("Finished file: " + videoInfo);
                     }
 
@@ -89,6 +92,7 @@ public class App {
 
                     @Override
                     public void onFinished(File videoInfo) {
+
                         System.out.println("Finished file: " + videoInfo);
                     }
 
