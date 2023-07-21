@@ -17,6 +17,12 @@ public class YT_Downloader_Main {
     private final YoutubeDownloader downloader = new YoutubeDownloader();
     public String Id;
 
+
+    public File audioDic = new File("Audios");
+
+    Format Aformat ;
+    private final VideoInfo video ;
+
     public YT_Downloader_Main(String id, File audioDic) {
         this.Id = id;
         this.audioDic = audioDic;
@@ -26,11 +32,6 @@ public class YT_Downloader_Main {
         List<AudioFormat> audioFormats = video.audioFormats();
         this.Aformat = audioFormats.get(1);
     }
-    public File audioDic =new File("Audios");
-
-
-    private final VideoInfo video ;
-
     public YT_Downloader_Main(String videoId) {
         this.Id = videoId;
         this.audioDic = new File("Audios");
@@ -40,9 +41,6 @@ public class YT_Downloader_Main {
         List<AudioFormat> audioFormats = video.audioFormats();
         this.Aformat = audioFormats.get(1);
     }
-
-
-    Format Aformat ;
 
 
    public void downloadAudio(){
