@@ -11,15 +11,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class PlaylistExtractor {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
 
-        String accessToken = "BQDb6ZibHu4rBztVf5JZvycfgf4YvwjyuO9BvdQIfBD9q4KUQTMDBQjFFY8ic3s7wQBHqReNz6SVwuS1OUSBWkbqebyEZjixWB8mvN1XnaIdvZWBHco";
+        String accessToken = "BQCx-M3RbVsVecufPs0IH9pez3_wOj2cE0Vcy-WmHk8Wh2IduLo_lSI2Rn9lKtI7751jQfmNs78goI1maNOEfXo2RViQlixj4LdGUryIynqdZIoL0tk";
 
-        String PlaylistTracks = getPlaylistTracks(accessToken, "5lrHJ230LgIxKImIpyP3nE");
+        String PlaylistTracks = getPlaylistTracks(accessToken, "07WB4eklst5yw4hHYLMDgD");
 
         PlaylistParser playlist = extractPlaylistInfo(PlaylistTracks);
+
+        List<metaData> metaDataList = new ArrayList<>();
 
         int trackcount = playlist.getTracks().getTotal();
 
@@ -27,17 +32,35 @@ public class PlaylistExtractor {
 
         if (trackcount <= limitcount) {
             for (int i = 0; i < trackcount; i++) {
+
                 String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
+
                 TrackExtractor.getTrackInfo(accessToken, trackId);
+
+                String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
+
+                metaData data =  TrackExtractor.display(TrackExtractor.extractTrackInfo(trackinfo));
+
+                metaDataList.add(data);
+
+
+
             }
         } else {
             for (int i = 0; i < limitcount; i++) {
                 String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
+
                 TrackExtractor.getTrackInfo(accessToken, trackId);
+
+                String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
+
+                metaData data =  TrackExtractor.display(Objects.requireNonNull(TrackExtractor.extractTrackInfo(trackinfo)));
+
+                metaDataList.add(data);
 
 
             }
@@ -69,7 +92,15 @@ public class PlaylistExtractor {
                     String trackId = item.getItems().get(i).getTrack().getId();
 
 
+
                     TrackExtractor.getTrackInfo(accessToken, trackId);
+
+                    String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
+
+                    metaData data =  TrackExtractor.display(Objects.requireNonNull(TrackExtractor.extractTrackInfo(trackinfo)));
+
+                    metaDataList.add(data);
+
 
 
                 }
@@ -82,6 +113,8 @@ public class PlaylistExtractor {
 
 
         }
+//        System.out.println(metaDataList.size());
+        //metaDataList contains metadata
 
     }
 

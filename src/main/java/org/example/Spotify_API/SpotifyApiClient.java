@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpotifyApiClient {
+
     public static void main(String[] args) {
         // Replace these with your actual client ID and client secret
         String clientId = "7ee25102ece74232b479ba6d654c8dad";
