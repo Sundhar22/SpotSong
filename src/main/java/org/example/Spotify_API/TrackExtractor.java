@@ -35,8 +35,12 @@ public class TrackExtractor {
         //BQAUQMYsV77XbXjF0IqH8f05UB44HXgceKFdAPbs35xZV-rdjLNuSnhq2-6OL1rgllmyiEyBPcz8pbJMwYA5HubRlU5BdI5FqFyEGymzmB30fV7UmVk
         String trackInfo = getTrackInfo(accessToken, "1W0QTc0qGWVhMOzxgoBgAQ");
         TrackParse track = extractTrackInfo(trackInfo);
+        metaData data = new metaData();
 
-        //List<metaData> metaDataList.display(track);
+
+        List<metaData> metaDataList  = new ArrayList<>();
+
+        metaDataList.add(data);
 
     }
 

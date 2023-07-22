@@ -17,9 +17,9 @@ import java.util.List;
 public class PlaylistExtractor {
     public static void main(String args[]) throws IOException {
 
-        String accessToken = "BQDb6ZibHu4rBztVf5JZvycfgf4YvwjyuO9BvdQIfBD9q4KUQTMDBQjFFY8ic3s7wQBHqReNz6SVwuS1OUSBWkbqebyEZjixWB8mvN1XnaIdvZWBHco";
+        String accessToken = "BQCp0M1yByuGQwivhundHxcw-S-BiQpagUYr72lcoMRMO-btiDGUWpR97wMoZD7ps_nMXAAYsmuYzTIgfuAUjNOVX1iAKtwGeHbN129Akr1By-ejGcg";
 
-        String PlaylistTracks = getPlaylistTracks(accessToken, "5lrHJ230LgIxKImIpyP3nE");
+        String PlaylistTracks = getPlaylistTracks(accessToken, "37i9dQZF1DWYfvJNWU1bKi");
 
         PlaylistParser playlist = extractPlaylistInfo(PlaylistTracks);
 
@@ -100,6 +100,8 @@ public class PlaylistExtractor {
 
 
         }
+
+        System.out.println(metaDataList.size());
 
         //metaDataList contains metadata
 
