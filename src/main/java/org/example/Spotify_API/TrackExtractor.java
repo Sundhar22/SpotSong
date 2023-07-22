@@ -34,16 +34,18 @@ public class TrackExtractor {
         // System.out.println(accessToken);
         //BQAUQMYsV77XbXjF0IqH8f05UB44HXgceKFdAPbs35xZV-rdjLNuSnhq2-6OL1rgllmyiEyBPcz8pbJMwYA5HubRlU5BdI5FqFyEGymzmB30fV7UmVk
         String trackInfo = getTrackInfo(accessToken, "1W0QTc0qGWVhMOzxgoBgAQ");
+        TrackParse track = extractTrackInfo(trackInfo);
 
+        //List<metaData> metaDataList.display(track);
 
     }
 
-    private static TrackParse extractTrackInfo(String responseBody) {
+    public static TrackParse extractTrackInfo(String responseBody) {
         try {
             ObjectMapper objectMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             TrackParse tokenResponse = objectMapper.readValue(responseBody, TrackParse.class);
-            display(tokenResponse);
+
             return tokenResponse;
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,39 +54,46 @@ public class TrackExtractor {
         return null;
     }
 
-    private static void display(TrackParse track) throws IOException {
+    public static metaData display(TrackParse track) throws IOException {
 
-        System.out.println("Name : " + track.getName());
+//        System.out.println("Name : " + track.getName());
+//
+//        System.out.println("Album : " + track.getAlbum().getName());
+//
+//
+//
+//
+//        System.out.println("Album Composer : " + track.getAlbum().getArtists().get(0).getName());
+//
+//        List<TrackParse.Artist> artists = track.getArtists();
+//
+//        int artistsLen = artists.size();
+//
+//        System.out.println("Artist : ");
+//
+//        for (int i=0 ; i < artistsLen ; i++){
+//
+//            System.out.println(track.getArtists().get(i).getName());
+//        }
+//
+//        System.out.println("Release Date : " + track.getAlbum().getRelease_date());
+//
+//        System.out.println("Duration : " + track.getDuration_ms() + "ms");
+//
+//        List<TrackParse.Image> images = track.getAlbum().getImages();
 
-        System.out.println("Album : " + track.getAlbum().getName());
+
+        List<metaData> metaDataList = new ArrayList<>();
+
+        metaData data = new metaData();
+        data.setArtistName(track.getAlbum().getArtists().get(0).getName());
+        data.setSongName(track.getName());
 
 
-
-
-        System.out.println("Album Composer : " + track.getAlbum().getArtists().get(0).getName());
-
-        List<TrackParse.Artist> artists = track.getArtists();
-
-        int artistsLen = artists.size();
-
-        System.out.println("Artist : ");
-
-        for (int i=0 ; i < artistsLen ; i++){
-
-            System.out.println(track.getArtists().get(i).getName());
-        }
-
-        System.out.println("Release Date : " + track.getAlbum().getRelease_date());
-
-        System.out.println("Duration : " + track.getDuration_ms() + "ms");
-
-        List<TrackParse.Image> images = track.getAlbum().getImages();
-
-
-
-        ImageDownloader image = new ImageDownloader(images.get(0).getUrl());
-
-        image.downloadImage();
+        return data;
+//        ImageDownloader image = new ImageDownloader(images.get(0).getUrl());
+//
+//        image.downloadImage();
     }
 
 
@@ -105,7 +114,7 @@ public class TrackExtractor {
             if (entity != null) {
                 String responseBody = EntityUtils.toString(entity);
                 //System.out.println(responseBody);
-                extractTrackInfo(responseBody);
+
                 return responseBody;
             }
         } catch (IOException e) {

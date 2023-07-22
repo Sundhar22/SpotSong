@@ -11,36 +11,47 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlaylistExtractor {
-    public static void main(String args[]){
+    public static void main(String args[]) throws IOException {
 
         String accessToken = "BQDb6ZibHu4rBztVf5JZvycfgf4YvwjyuO9BvdQIfBD9q4KUQTMDBQjFFY8ic3s7wQBHqReNz6SVwuS1OUSBWkbqebyEZjixWB8mvN1XnaIdvZWBHco";
 
-        String PlaylistTracks = getPlaylistTracks(accessToken,"5lrHJ230LgIxKImIpyP3nE");
+        String PlaylistTracks = getPlaylistTracks(accessToken, "5lrHJ230LgIxKImIpyP3nE");
 
         PlaylistParser playlist = extractPlaylistInfo(PlaylistTracks);
+
+        List<metaData> metaDataList = new ArrayList<>();
 
         int trackcount = playlist.getTracks().getTotal();
 
         int limitcount = playlist.getTracks().getLimit();
 
-        if(trackcount <= limitcount){
-            for (int i = 0; i < trackcount; i ++){
+        if (trackcount <= limitcount) {
+            for (int i = 0; i < trackcount; i++) {
                 String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
+                String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
 
-               TrackExtractor.getTrackInfo(accessToken,trackId);
+                metaData data =  TrackExtractor.display(TrackExtractor.extractTrackInfo(trackinfo));
+
+                metaDataList.add(data);
+
+
             }
-        }
-        else {
-            for (int i = 0; i < limitcount; i ++){
+        } else {
+            for (int i = 0; i < limitcount; i++) {
                 String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
+                String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
 
-                TrackExtractor.getTrackInfo(accessToken,trackId);
+                metaData data =  TrackExtractor.display(TrackExtractor.extractTrackInfo(trackinfo));
+
+                metaDataList.add(data);
 
 
             }
@@ -50,13 +61,10 @@ public class PlaylistExtractor {
             trackcount = trackcount - limitcount;
 
 
-
-            while (trackcount > 0){
-
+            while (trackcount > 0) {
 
 
-
-                String nextPlaylistTracks = getNextPlaylistTrack(accessToken , nextURL);
+                String nextPlaylistTracks = getNextPlaylistTrack(accessToken, nextURL);
 
                 PlaylistParser.tracks item = extractNextPlaylist(nextPlaylistTracks);
 
@@ -64,19 +72,22 @@ public class PlaylistExtractor {
 
                 newcount = trackcount;
 
-                if (trackcount > limitcount){
+                if (trackcount > limitcount) {
                     newcount = limitcount;
                     nextURL = item.getNext();
 
                 }
 
 
-                for (int i = 0; i < newcount; i ++){
+                for (int i = 0; i < newcount; i++) {
                     String trackId = item.getItems().get(i).getTrack().getId();
 
 
-                    TrackExtractor.getTrackInfo(accessToken,trackId);
+                    String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
 
+                    metaData data =  TrackExtractor.display(TrackExtractor.extractTrackInfo(trackinfo));
+
+                    metaDataList.add(data);
 
 
                 }
@@ -88,12 +99,9 @@ public class PlaylistExtractor {
             }
 
 
-
-
-
-
-
         }
+
+        //metaDataList contains metadata
 
     }
 
@@ -123,7 +131,7 @@ public class PlaylistExtractor {
         return null;
     }
 
-    public static String getPlaylistTracks(String accessToken,String playListId){
+    public static String getPlaylistTracks(String accessToken, String playListId) {
         String apiUrl = "https://api.spotify.com/v1/playlists/" + playListId;
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -148,7 +156,7 @@ public class PlaylistExtractor {
         return null;
     }
 
-    public static String getNextPlaylistTrack(String accessToken,String url){
+    public static String getNextPlaylistTrack(String accessToken, String url) {
         String apiUrl = url;
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -173,5 +181,5 @@ public class PlaylistExtractor {
         return null;
     }
 
-    }
+}
 
