@@ -15,23 +15,11 @@ import java.util.List;
 
 public class TrackExtractor {
     public static void main(String[] args) throws IOException {
-
-
-
-
         String accessToken = "BQB3-ZGMyvr3bWT_INbqybkq1agUjyjp_1sqI33D5jmf7f3BPaCLuI-q5mO6UcL_u4k7fUs3za2J9fD7FMsFDMTDwY_Vg-Lh6xo_MgWC4yfk557yajE";// Replace with the actual access token
-
-
-
-
-
         String trackInfo = getTrackInfo(accessToken, "1W0QTc0qGWVhMOzxgoBgAQ");
-        //System.out.println("Track Info: " + trackInfo);
 
 
         TrackParse track = extractTrackInfo(trackInfo);
-
-
 
 
         System.out.println("Name : " + track.getName());
@@ -47,13 +35,12 @@ public class TrackExtractor {
 
         System.out.println("Artist : ");
 
-        for (int i=0 ; i < artistsLen ; i++){
+        for (int i = 0; i < artistsLen; i++) {
 
-        System.out.println(track.getArtists().get(i).getName());
+            System.out.println(track.getArtists().get(i).getName());
         }
 
         List<TrackParse.Image> images = track.getAlbum().getImages();
-
 
 
         ImageDownloader image = new ImageDownloader(images.get(0).getUrl());
@@ -73,7 +60,6 @@ public class TrackExtractor {
 
         return null;
     }
-
 
 
     public static String getTrackInfo(String accessToken, String trackId) {

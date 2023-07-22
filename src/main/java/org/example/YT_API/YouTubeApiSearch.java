@@ -24,7 +24,7 @@ public class YouTubeApiSearch {
 
     // You need to set this value for your code to compile.
     // For example: ... DEVELOPER_KEY = "YOUR ACTUAL KEY";
-    private static final String DEVELOPER_KEY = "AIzaSyDoW3FkDrM3QLwhKZYeSm1u7RMKeAZQ_3E";
+    public static final String DEVELOPER_KEY = "AIzaSyDoW3FkDrM3QLwhKZYeSm1u7RMKeAZQ_3E";
 
     private static final String APPLICATION_NAME = "SongDownloader";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -48,24 +48,5 @@ public class YouTubeApiSearch {
      *
      * @throws GeneralSecurityException, IOException, GoogleJsonResponseException
      */
-    public static void main(String[] args)
-            throws GeneralSecurityException, IOException, GoogleJsonResponseException {
-        YouTube youtubeService = getService();
-        // Define and execute the API request
-        YouTube.Search.List request = youtubeService.search()
-                .list("snippet");
-        SearchListResponse response = request.setKey(DEVELOPER_KEY)
-                .setQ("idhayam love(Megamo aval)-From\"Meyaadha Maan\"")
-                .setType("Song|Audio")
-                .execute();
 
-        List<SearchResult> items = response.getItems();
-        List<Object> videoIdList = new ArrayList<>();
-        for (SearchResult item : items) {
-            videoIdList.add(item.getId().getVideoId());
-        }
-        System.out.println(videoIdList);
-
-
-    }
 }

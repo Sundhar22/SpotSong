@@ -20,8 +20,8 @@ import java.util.List;
 public class SpotifyApiClient {
     public static void main(String[] args) {
         // Replace these with your actual client ID and client secret
-        String clientId = "Client_Id";
-        String clientSecret = "Client_Secret";
+        String clientId = "7ee25102ece74232b479ba6d654c8dad";
+        String clientSecret = "74cebc3cfcbe4131bb42a32363e85aee";
 
         String accessToken = getAccessToken(clientId, clientSecret);
         System.out.println("Access Token: " + accessToken);
