@@ -18,6 +18,70 @@ public class TrackParse {
 
     // Constructors, getters, and setters for all the fields
 
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public List<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<Artist> artists) {
+        this.artists = artists;
+    }
+
+    public long getDuration_ms() {
+        return duration_ms;
+    }
+
+    public void setDuration_ms(long duration_ms) {
+        this.duration_ms = duration_ms;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isIs_local() {
+        return is_local;
+    }
+
+    public void setIs_local(boolean is_local) {
+        this.is_local = is_local;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
+    }
+
+    public int getTrack_number() {
+        return track_number;
+    }
+
+    public void setTrack_number(int track_number) {
+        this.track_number = track_number;
+    }
+
     public static class Album {
         private String album_type;
         private List<Artist> artists;
@@ -44,9 +108,6 @@ public class TrackParse {
         public void setArtists(List<Artist> artists) {
             this.artists = artists;
         }
-
-
-
 
 
         public List<Image> getImages() {
@@ -108,13 +169,12 @@ public class TrackParse {
         // Constructors, getters, and setters for all the fields
     }
 
+
     public static class Artist {
 
         private String name;
         private String type;
         private String uri;
-
-
 
 
         public String getName() {
@@ -150,6 +210,7 @@ public class TrackParse {
         // Constructors, getters, and setters for the field
     }
 
+
     public static class ExternalUrls {
         private String spotify;
 
@@ -169,77 +230,6 @@ public class TrackParse {
             this.url = url;
         }
 // Constructors, getters, and setters for the fields
-    }
-
-    public Album getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(Album album) {
-        this.album = album;
-    }
-
-    public List<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
-
-
-
-
-    public long getDuration_ms() {
-        return duration_ms;
-    }
-
-    public void setDuration_ms(long duration_ms) {
-        this.duration_ms = duration_ms;
-    }
-
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public boolean isIs_local() {
-        return is_local;
-    }
-
-    public void setIs_local(boolean is_local) {
-        this.is_local = is_local;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(int popularity) {
-        this.popularity = popularity;
-    }
-
-
-
-    public int getTrack_number() {
-        return track_number;
-    }
-
-    public void setTrack_number(int track_number) {
-        this.track_number = track_number;
     }
 
 

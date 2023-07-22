@@ -1,30 +1,70 @@
 package org.example.Spotify_API;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrackExtractor {
-    public static void main(String[] args) throws IOException {
-        String accessToken = "BQB3-ZGMyvr3bWT_INbqybkq1agUjyjp_1sqI33D5jmf7f3BPaCLuI-q5mO6UcL_u4k7fUs3za2J9fD7FMsFDMTDwY_Vg-Lh6xo_MgWC4yfk557yajE";// Replace with the actual access token
-        String trackInfo = getTrackInfo(accessToken, "1W0QTc0qGWVhMOzxgoBgAQ");
 
 
-        TrackParse track = extractTrackInfo(trackInfo);
+
+//    public static void main(String[] args) throws IOException {
+//
+//        String accessToken = "BQB3-ZGMyvr3bWT_INbqybkq1agUjyjp_1sqI33D5jmf7f3BPaCLuI-q5mO6UcL_u4k7fUs3za2J9fD7FMsFDMTDwY_Vg-Lh6xo_MgWC4yfk557yajE";// Replace with the actual access token
+//
+//
+//        //BQB2NB7VJ0P_k-EO8b_ioX7aPmNjyhRK7LFS_Xd5BFPhkT8mRuS63G4O59-G7EVcdtqI_9jtIlf2KP4A5NahOuCo9SuDlbFiqIlqokewS0oihnIMh_Q
+//
+//
+//
+//        String accessToken = "BQAUQMYsV77XbXjF0IqH8f05UB44HXgceKFdAPbs35xZV-rdjLNuSnhq2-6OL1rgllmyiEyBPcz8pbJMwYA5HubRlU5BdI5FqFyEGymzmB30fV7UmVk";
+//        // System.out.println(accessToken);
+//        //BQAUQMYsV77XbXjF0IqH8f05UB44HXgceKFdAPbs35xZV-rdjLNuSnhq2-6OL1rgllmyiEyBPcz8pbJMwYA5HubRlU5BdI5FqFyEGymzmB30fV7UmVk
+//
+//        String trackInfo = getTrackInfo(accessToken, "1W0QTc0qGWVhMOzxgoBgAQ");
+//
+//
+//    }
+
+    private static TrackParse extractTrackInfo(String responseBody) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            TrackParse tokenResponse = objectMapper.readValue(responseBody, TrackParse.class);
+            display(tokenResponse);
+            return tokenResponse;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    private static void display(TrackParse track) throws IOException {
 
 
         System.out.println("Name : " + track.getName());
 
-        System.out.println("Album :" + track.getAlbum().getName());
+        System.out.println("Album : " + track.getAlbum().getName());
+
+
 
 
         System.out.println("Album Composer : " + track.getAlbum().getArtists().get(0).getName());
@@ -40,25 +80,16 @@ public class TrackExtractor {
             System.out.println(track.getArtists().get(i).getName());
         }
 
+        System.out.println("Release Date : " + track.getAlbum().getRelease_date());
+
+        System.out.println("Duration : " + track.getDuration_ms() + "ms");
+
         List<TrackParse.Image> images = track.getAlbum().getImages();
 
 
         ImageDownloader image = new ImageDownloader(images.get(0).getUrl());
 
         image.downloadImage();
-    }
-
-    private static TrackParse extractTrackInfo(String responseBody) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper()
-                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            TrackParse tokenResponse = objectMapper.readValue(responseBody, TrackParse.class);
-            return tokenResponse;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
 
@@ -78,6 +109,7 @@ public class TrackExtractor {
             if (entity != null) {
                 String responseBody = EntityUtils.toString(entity);
                 //System.out.println(responseBody);
+                extractTrackInfo(responseBody);
                 return responseBody;
             }
         } catch (IOException e) {
@@ -89,3 +121,4 @@ public class TrackExtractor {
 
 
 }
+

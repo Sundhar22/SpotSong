@@ -23,7 +23,7 @@ import static org.example.YT_API.YouTubeApiSearch.DEVELOPER_KEY;
 
 public class App {
     public static void main(String[] args) throws GeneralSecurityException, IOException, GoogleJsonResponseException, CannotWriteException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
-        YouTube youtubeService = getService();
+        YouTube youtubeService = getService(); List<String> videoIdList = new ArrayList<>();
         // Define and execute the API request
         YouTube.Search.List request = youtubeService.search()
                 .list("snippet");
@@ -33,11 +33,17 @@ public class App {
                 .execute();
 
         List<SearchResult> items = response.getItems();
-        List<String> videoIdList = new ArrayList<>();
-        for (SearchResult item : items) {
-            videoIdList.add(item.getId().getVideoId());
-        }
-        new Downloader(videoIdList.get(0), new File("C:\\Users\\smoha\\Desktop"),"","").downloadAudio();
+//        System.out.println("items -> :" +items);
+        videoIdList.add(items.get(0).getId().getVideoId());
+        System.out.println(videoIdList);
+
+//        for (SearchResult item : items) {
+//            videoIdList.add(item.getId().getVideoId());
+//        }
+//        for (int i = 0; i < videoIdList.size(); i++) {
+//            new Downloader(videoIdList.get(i), new File("C:\\Users\\smoha\\Desktop"),"","").downloadAudio();
+//
+//        }
 
     }
 }
