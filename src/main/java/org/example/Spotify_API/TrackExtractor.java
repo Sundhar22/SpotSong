@@ -30,12 +30,12 @@ public class TrackExtractor {
 
 
 
-        String accessToken = "BQAUQMYsV77XbXjF0IqH8f05UB44HXgceKFdAPbs35xZV-rdjLNuSnhq2-6OL1rgllmyiEyBPcz8pbJMwYA5HubRlU5BdI5FqFyEGymzmB30fV7UmVk";
+        String accessToken = "BQAmm2MIOFEsn3YKyXNxZro_-AciO4fWLh_neq0pxBwRHNGaOGJtHEjOFa0MRTyhNySppcaXDH5Jpj7oKYPVHWKsDTQFiZkjmsaR9c_NBs5cHWBO7ZE";
         // System.out.println(accessToken);
         //BQAUQMYsV77XbXjF0IqH8f05UB44HXgceKFdAPbs35xZV-rdjLNuSnhq2-6OL1rgllmyiEyBPcz8pbJMwYA5HubRlU5BdI5FqFyEGymzmB30fV7UmVk
         String trackInfo = getTrackInfo(accessToken, "1W0QTc0qGWVhMOzxgoBgAQ");
         TrackParse track = extractTrackInfo(trackInfo);
-        metaData data = new metaData();
+        metaData data = display(track);
 
 
         List<metaData> metaDataList  = new ArrayList<>();
@@ -87,7 +87,7 @@ public class TrackExtractor {
 //        List<TrackParse.Image> images = track.getAlbum().getImages();
 
 
-        List<metaData> metaDataList = new ArrayList<>();
+
 
         metaData data = new metaData();
         data.setArtistName(track.getAlbum().getArtists().get(0).getName());
