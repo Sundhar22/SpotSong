@@ -4,6 +4,11 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
+import org.example.Spotify_API.Models.YouTubeApiKey;
+import org.example.Spotify_API.Models.metaData;
+import org.example.Spotify_API.PlaylistExtractor;
+import org.example.Spotify_API.SpotifyApiClient;
+import org.example.YT_API.YouTubeApiSearch;
 import org.example.YT_downloader.Downloader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -18,32 +23,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import static org.example.YT_API.YouTubeApiSearch.getService;
-import static org.example.YT_API.YouTubeApiSearch.DEVELOPER_KEY;
-
 public class App {
     public static void main(String[] args) throws GeneralSecurityException, IOException, GoogleJsonResponseException, CannotWriteException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
-        YouTube youtubeService = getService(); List<String> videoIdList = new ArrayList<>();
-        // Define and execute the API request
+
+        String accessToken = new SpotifyApiClient().getAccessToken();
+        System.out.println("Pls wait getting song data");
+        List<metaData> songs = new PlaylistExtractor().SongsList(accessToken, "37i9dQZF1E36bNx4aBj3BI");
+        YouTube youtubeService = new YouTubeApiSearch().getService();
         YouTube.Search.List request = youtubeService.search()
                 .list("snippet");
-        SearchListResponse response = request.setKey(DEVELOPER_KEY)
-                .setQ("Onnume Aagala")
-                .setType("Song|Audio")
-                .execute();
+        List<String> videoIdList = new ArrayList<>();
+        System.out.println();
+        System.out.println("SuccessFully collected your Songs");
+        System.out.println();
 
-        List<SearchResult> items = response.getItems();
-//        System.out.println("items -> :" +items);
-        videoIdList.add(items.get(0).getId().getVideoId());
-        System.out.println(videoIdList);
+        songs.forEach(song -> {
+            try {
+                SearchListResponse response = request.setKey(new YouTubeApiKey().getDEVELOPER_KEY())
+                        .setQ(song.getSongName() + "& Artist - " + song.getArtistName())
+                        .setType("Song|Audio")
+                        .execute();
+                List<SearchResult> items = response.getItems();
+                videoIdList.add(items.get(0).getId().getVideoId());
 
-//        for (SearchResult item : items) {
-//            videoIdList.add(item.getId().getVideoId());
-//        }
-//        for (int i = 0; i < videoIdList.size(); i++) {
-//            new Downloader(videoIdList.get(i), new File("C:\\Users\\smoha\\Desktop"),"","").downloadAudio();
-//
-//        }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        System.out.println();
+        System.out.println("Lets Download");
+        System.out.println();
+        for (String s : videoIdList) {
+            new Downloader(s, new File("D:\\Songs"), "", "").downloadAudio();
+
+        }
+        System.out.println();
+        System.out.println("SuccessFully downloaded your Songs");
+        System.out.println();
 
     }
 }

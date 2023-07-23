@@ -1,4 +1,4 @@
-package org.example.Spotify_API;
+package org.example.Spotify_API.Downloader;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;

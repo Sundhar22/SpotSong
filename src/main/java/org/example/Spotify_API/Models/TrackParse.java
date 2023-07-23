@@ -1,4 +1,4 @@
-package org.example.Spotify_API;
+package org.example.Spotify_API.Models;
 
 import java.util.List;
 

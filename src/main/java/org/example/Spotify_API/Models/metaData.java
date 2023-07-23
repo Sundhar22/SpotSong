@@ -1,4 +1,4 @@
-package org.example.Spotify_API;
+package org.example.Spotify_API.Models;
 
 public class metaData {
     private String songName;

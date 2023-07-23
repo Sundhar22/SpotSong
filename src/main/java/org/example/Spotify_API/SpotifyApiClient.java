@@ -12,6 +12,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.example.Spotify_API.Models.SpotifyApiKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,16 +20,8 @@ import java.util.List;
 
 public class SpotifyApiClient {
 
-    public static void main(String[] args) {
-        // Replace these with your actual client ID and client secret
-        String clientId = "7ee25102ece74232b479ba6d654c8dad";
-        String clientSecret = "74cebc3cfcbe4131bb42a32363e85aee";
 
-        String accessToken = getAccessToken(clientId, clientSecret);
-        System.out.println("Access Token: " + accessToken);
-    }
-
-    public static String getAccessToken(String clientId, String clientSecret) {
+    public String getAccessToken() {
         String accessTokenUrl = "https://accounts.spotify.com/api/token";
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -36,8 +29,8 @@ public class SpotifyApiClient {
 
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("grant_type", "client_credentials"));
-            params.add(new BasicNameValuePair("client_id", clientId));
-            params.add(new BasicNameValuePair("client_secret", clientSecret));
+            params.add(new BasicNameValuePair("client_id", new SpotifyApiKey().getClientId()));
+            params.add(new BasicNameValuePair("client_secret", new SpotifyApiKey().getClientSecret()));
 
             httpPost.setEntity(new UrlEncodedFormEntity(params));
 
@@ -55,8 +48,8 @@ public class SpotifyApiClient {
         return null;
     }
 
-    // Helper method to extract the access token using Jackson JSON parsing
-    private static String extractAccessToken(String responseBody) {
+
+    private String extractAccessToken(String responseBody) {
         try {
             ObjectMapper objectMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -69,7 +62,7 @@ public class SpotifyApiClient {
         return null;
     }
 
-    // Helper class to represent the access token response structure
+
     private static class AccessTokenResponse {
         @JsonProperty("access_token")
         private String accessToken;

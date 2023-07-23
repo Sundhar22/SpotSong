@@ -9,6 +9,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.example.Spotify_API.Models.PlaylistParser;
+import org.example.Spotify_API.Models.metaData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,114 +18,102 @@ import java.util.List;
 import java.util.Objects;
 
 public class PlaylistExtractor {
-    public static void main(String args[]) throws IOException {
 
-        String accessToken = "BQCx-M3RbVsVecufPs0IH9pez3_wOj2cE0Vcy-WmHk8Wh2IduLo_lSI2Rn9lKtI7751jQfmNs78goI1maNOEfXo2RViQlixj4LdGUryIynqdZIoL0tk";
+    public List<metaData> SongsList(String accessToken, String playListId) throws IOException {
 
-        String PlaylistTracks = getPlaylistTracks(accessToken, "07WB4eklst5yw4hHYLMDgD");
+        String PlaylistTracks = getPlaylistTracks(accessToken, playListId);
 
         PlaylistParser playlist = extractPlaylistInfo(PlaylistTracks);
 
         List<metaData> metaDataList = new ArrayList<>();
 
-        int trackcount = playlist.getTracks().getTotal();
+        assert playlist != null;
+        int trackCount = playlist.getTracks().getTotal();
 
-        int limitcount = playlist.getTracks().getLimit();
+        int limitCount = playlist.getTracks().getLimit();
 
-        if (trackcount <= limitcount) {
-            for (int i = 0; i < trackcount; i++) {
-
+        if (trackCount <= limitCount) {
+            for (int i = 0; i < trackCount; i++) {
                 String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
+                String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-                TrackExtractor.getTrackInfo(accessToken, trackId);
-
-                String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
-
-                metaData data =  TrackExtractor.display(TrackExtractor.extractTrackInfo(trackinfo));
+                metaData data =new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
 
                 metaDataList.add(data);
-
 
 
             }
         } else {
-            for (int i = 0; i < limitcount; i++) {
+            for (int i = 0; i < limitCount; i++) {
                 String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
+                String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-                TrackExtractor.getTrackInfo(accessToken, trackId);
-
-                String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
-
-                metaData data =  TrackExtractor.display(Objects.requireNonNull(TrackExtractor.extractTrackInfo(trackinfo)));
+                metaData data = new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
 
                 metaDataList.add(data);
 
 
             }
 
-            String nextURL = playlist.getTracks().getNext().toString();
+            String nextURL = playlist.getTracks().getNext();
 
-            trackcount = trackcount - limitcount;
+            trackCount = trackCount - limitCount;
 
 
-            while (trackcount > 0) {
+            while (trackCount > 0) {
 
 
                 String nextPlaylistTracks = getNextPlaylistTrack(accessToken, nextURL);
 
                 PlaylistParser.tracks item = extractNextPlaylist(nextPlaylistTracks);
 
-                int newcount;
+                int newCount;
 
-                newcount = trackcount;
+                newCount = trackCount;
 
-                if (trackcount > limitcount) {
-                    newcount = limitcount;
+                if (trackCount > limitCount) {
+                    newCount = limitCount;
+                    assert item != null;
                     nextURL = item.getNext();
 
                 }
 
 
-                for (int i = 0; i < newcount; i++) {
+                for (int i = 0; i < newCount; i++) {
+                    assert item != null;
                     String trackId = item.getItems().get(i).getTrack().getId();
 
 
+                    String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-                    TrackExtractor.getTrackInfo(accessToken, trackId);
-
-                    String trackinfo = TrackExtractor.getTrackInfo(accessToken, trackId);
-
-                    metaData data =  TrackExtractor.display(Objects.requireNonNull(TrackExtractor.extractTrackInfo(trackinfo)));
+                    metaData data = new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
 
                     metaDataList.add(data);
-
 
 
                 }
 
 
-                trackcount = trackcount - limitcount;
+                trackCount = trackCount - limitCount;
 
 
             }
 
 
         }
-//        System.out.println(metaDataList.size());
-        //metaDataList contains metadata
+        return metaDataList;
 
     }
 
-    private static PlaylistParser extractPlaylistInfo(String responseBody) {
+    private PlaylistParser extractPlaylistInfo(String responseBody) {
         try {
             ObjectMapper objectMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            PlaylistParser tokenResponse = objectMapper.readValue(responseBody, PlaylistParser.class);
-            return tokenResponse;
+            return objectMapper.readValue(responseBody, PlaylistParser.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,12 +121,11 @@ public class PlaylistExtractor {
         return null;
     }
 
-    private static PlaylistParser.tracks extractNextPlaylist(String responseBody) {
+    private PlaylistParser.tracks extractNextPlaylist(String responseBody) {
         try {
             ObjectMapper objectMapper = new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            PlaylistParser.tracks tokenResponse = objectMapper.readValue(responseBody, PlaylistParser.tracks.class);
-            return tokenResponse;
+            return objectMapper.readValue(responseBody, PlaylistParser.tracks.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,7 +133,7 @@ public class PlaylistExtractor {
         return null;
     }
 
-    public static String getPlaylistTracks(String accessToken, String playListId) {
+    private String getPlaylistTracks(String accessToken, String playListId) {
         String apiUrl = "https://api.spotify.com/v1/playlists/" + playListId;
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
@@ -158,9 +147,7 @@ public class PlaylistExtractor {
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
-                String responseBody = EntityUtils.toString(entity);
-                //System.out.println(responseBody);
-                return responseBody;
+                return EntityUtils.toString(entity);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,11 +156,10 @@ public class PlaylistExtractor {
         return null;
     }
 
-    public static String getNextPlaylistTrack(String accessToken, String url) {
-        String apiUrl = url;
+    private String getNextPlaylistTrack(String accessToken, String url) {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet(apiUrl);
+            HttpGet httpGet = new HttpGet(url);
 
             // Set the Authorization header with the access token
             httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
@@ -183,9 +169,8 @@ public class PlaylistExtractor {
             HttpEntity entity = response.getEntity();
 
             if (entity != null) {
-                String responseBody = EntityUtils.toString(entity);
                 //System.out.println(responseBody);
-                return responseBody;
+                return EntityUtils.toString(entity);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -195,4 +180,3 @@ public class PlaylistExtractor {
     }
 
 }
-

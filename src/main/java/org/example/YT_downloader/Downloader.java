@@ -84,13 +84,6 @@ public class Downloader {
                .async();
        Response<File> response3 = downloader.downloadVideoFile(request3);
        File data = response3.data();
-//
-//       AudioFile audioFileObject = AudioFileIO.read(data);
-//       Tag tag = audioFileObject.getTag();
-//       tag.setField(FieldKey.ARTIST, this.Artist);
-//       tag.setField(FieldKey.ALBUM, this.Album);
-////       tag.setField(FieldKey.LYRICS, lyrics);
-//
-//       AudioFileIO.write(audioFileObject);
+
    }
 }
