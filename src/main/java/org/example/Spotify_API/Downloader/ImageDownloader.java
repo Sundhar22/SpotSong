@@ -1,4 +1,4 @@
-package org.example.Spotify_API;
+package org.example.Spotify_API.Downloader;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
@@ -9,9 +9,9 @@ import java.net.URLConnection;
 
 public class ImageDownloader {
 
-    private String imageUrl;
+    private final String imageUrl;
 
-    private  String destinationFile;
+    private final String destinationFile;
 
     public ImageDownloader(String imageUrl,String destinationFile){
         this.imageUrl = imageUrl;
@@ -24,9 +24,6 @@ public class ImageDownloader {
         this.imageUrl = imageUrl;
         this.destinationFile = "D:\\images.jpg";
     }
-
-
-
 
 
     public  void downloadImage() throws IOException {

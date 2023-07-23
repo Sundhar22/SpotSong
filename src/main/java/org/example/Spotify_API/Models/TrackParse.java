@@ -1,4 +1,4 @@
-package org.example.Spotify_API;
+package org.example.Spotify_API.Models;
 
 import java.util.List;
 
@@ -16,6 +16,45 @@ public class TrackParse {
 
     // Constructors, getters, and setters for all the fields
 
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
+    public List<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<Artist> artists) {
+        this.artists = artists;
+    }
+
+    public long getDuration_ms() {
+        return duration_ms;
+    }
+
+    public void setDuration_ms(long duration_ms) {
+        this.duration_ms = duration_ms;
+    }
+
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
+
+
+
     public static class Album {
 
         private List<Artist> artists;
@@ -32,9 +71,6 @@ public class TrackParse {
         public void setArtists(List<Artist> artists) {
             this.artists = artists;
         }
-
-
-
 
 
         public List<Image> getImages() {
@@ -65,11 +101,10 @@ public class TrackParse {
         // Constructors, getters, and setters for all the fields
     }
 
+
     public static class Artist {
 
         private String name;
-
-
 
 
 
@@ -90,6 +125,7 @@ public class TrackParse {
 
 
 
+
     public static class Image {
 
         private String url;
@@ -104,48 +140,6 @@ public class TrackParse {
         }
 // Constructors, getters, and setters for the fields
     }
-
-    public Album getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(Album album) {
-        this.album = album;
-    }
-
-    public List<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
-
-
-
-
-    public long getDuration_ms() {
-        return duration_ms;
-    }
-
-    public void setDuration_ms(long duration_ms) {
-        this.duration_ms = duration_ms;
-    }
-
-
-
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-
 
 }
 

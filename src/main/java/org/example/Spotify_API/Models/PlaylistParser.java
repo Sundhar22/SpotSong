@@ -1,12 +1,21 @@
-package org.example.Spotify_API;
+package org.example.Spotify_API.Models;
 
 import java.util.List;
 
 public class PlaylistParser {
+    private tracks tracks;
+
+    public PlaylistParser.tracks getTracks() {
+        return tracks;
+    }
+
+    public void setTracks(PlaylistParser.tracks tracks) {
+        this.tracks = tracks;
+    }
+
     public static class Item {
 
         private Track track;
-
 
 
         public Track getTrack() {
@@ -25,10 +34,6 @@ public class PlaylistParser {
         private String id;
 
 
-
-
-
-
         public String getId() {
             return id;
         }
@@ -38,23 +43,18 @@ public class PlaylistParser {
         }
 
 
-
-
-
         // Getters and Setters (omitted for brevity)
     }
 
+    public static class tracks {
 
-
-    public static class tracks{
-
-    private String href;
-    private int limit;
-    private String next;
-    private int offset;
-    private String previous;
-    private int total;
-    private List<Item> items;
+        private String href;
+        private int limit;
+        private String next;
+        private int offset;
+        private String previous;
+        private int total;
+        private List<Item> items;
 
         public String getHref() {
             return href;
@@ -111,16 +111,6 @@ public class PlaylistParser {
         public void setItems(List<Item> items) {
             this.items = items;
         }
-    }
-
-    private tracks tracks;
-
-    public PlaylistParser.tracks getTracks() {
-        return tracks;
-    }
-
-    public void setTracks(PlaylistParser.tracks tracks) {
-        this.tracks = tracks;
     }
 
     // Getters and Setters (omitted for brevity)
