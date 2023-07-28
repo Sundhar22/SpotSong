@@ -1,14 +1,12 @@
 package org.example;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.SearchListResponse;
-import com.google.api.services.youtube.model.SearchResult;
-import org.example.Spotify_API.Models.YouTubeApiKey;
+
 import org.example.Spotify_API.Models.metaData;
 import org.example.Spotify_API.PlaylistExtractor;
 import org.example.Spotify_API.SpotifyApiClient;
-import org.example.YT_API.YouTubeApiSearch;
+
+import org.example.YT_API.YoutubeSearch;
 import org.example.YT_downloader.Downloader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.CannotWriteException;
@@ -28,27 +26,24 @@ public class App {
 
         String accessToken = new SpotifyApiClient().getAccessToken();
         System.out.println("Pls wait getting song data");
-        List<metaData> songs = new PlaylistExtractor().SongsList(accessToken, "37i9dQZF1E36bNx4aBj3BI");
-        YouTube youtubeService = new YouTubeApiSearch().getService();
-        YouTube.Search.List request = youtubeService.search()
-                .list("snippet");
+        List<metaData> songs = new PlaylistExtractor().SongsList(accessToken, "37i9dQZF1DWYfvJNWU1bKi");
+        System.out.println(songs.size());
+
         List<String> videoIdList = new ArrayList<>();
         System.out.println();
         System.out.println("SuccessFully collected your Songs");
         System.out.println();
 
-        songs.forEach(song -> {
-            try {
-                SearchListResponse response = request.setKey(new YouTubeApiKey().getDEVELOPER_KEY())
-                        .setQ(song.getSongName() + "& Artist - " + song.getArtistName())
-                        .setType("Song|Audio")
-                        .execute();
-                List<SearchResult> items = response.getItems();
-                videoIdList.add(items.get(0).getId().getVideoId());
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+
+        songs.forEach(song -> {
+
+            YoutubeSearch searcher = new YoutubeSearch(song.getSongName(),song.getArtistName());
+
+            if(searcher.getId() != " "){
+            videoIdList.add(searcher.getId());
             }
+
         });
         System.out.println();
         System.out.println("Lets Download");
