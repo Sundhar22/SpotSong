@@ -6,59 +6,50 @@ import com.github.kiulian.downloader.model.search.SearchResult;
 import com.github.kiulian.downloader.model.search.SearchResultItem;
 import com.github.kiulian.downloader.model.search.SearchResultVideoDetails;
 import com.github.kiulian.downloader.model.search.field.*;
+import org.example.Spotify_API.Models.MetaData;
 
 import java.util.List;
 
 public class YoutubeSearch {
 
-    private String name;
 
-    private String artist;
-
+    private MetaData _song;
 
 
     YoutubeDownloader downloader = new YoutubeDownloader();
-    public  YoutubeSearch(String name,String artist) {
 
+    public YoutubeSearch(MetaData song) {
+        this._song = song;
 
-
-        this.name = name;
-
-        this.artist = artist;
 
     }
 
-    public String getId(){
+    public void setDownloadId() {
 
-
-
-        RequestSearchResult request = new RequestSearchResult(name+" "+artist)
+        RequestSearchResult request = new RequestSearchResult(_song.getSongName() + " by " + _song.getArtistName())
                 .type(TypeField.VIDEO);
 
         SearchResult result = downloader.search(request).data();
 
 
-
         List<SearchResultItem> items = result.items();
-        if(items.size()==0){
-            return " ";
+        if (items.isEmpty()) {
+            _song.setDownloadId("");
+            return;
         }
         SearchResultItem item = items.get(0);
         switch (item.type()) {
-            case VIDEO:
-
-                return item.asVideo().videoId();
-
-
-            case SHELF:
+            case VIDEO -> {
+                _song.setDownloadId(item.asVideo().videoId());
+                return;
+            }
+            case SHELF -> {
                 for (SearchResultVideoDetails video : item.asShelf().videos()) {
-
-                    return video.videoId();
+                    _song.setDownloadId(video.videoId());
+                    return;
                 }
-                break;
-
+            }
         }
-        return "none";
     }
 
 

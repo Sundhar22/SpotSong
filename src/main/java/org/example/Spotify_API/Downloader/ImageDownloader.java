@@ -1,9 +1,6 @@
 package org.example.Spotify_API.Downloader;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -11,24 +8,34 @@ public class ImageDownloader {
 
     private final String imageUrl;
 
-    private final String destinationFile;
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-    public ImageDownloader(String imageUrl,String destinationFile){
+    private final String destinationFolderPath;
+
+
+    public ImageDownloader(String imageUrl,String destinationFolderPath){
         this.imageUrl = imageUrl;
 
-        this.destinationFile = destinationFile;
+        this.destinationFolderPath = destinationFolderPath;
 
     }
 
     public ImageDownloader(String imageUrl){
         this.imageUrl = imageUrl;
-        this.destinationFile = "D:\\images.jpg";
+        this.destinationFolderPath = "D:\\images";
     }
 
 
-    public  void downloadImage() throws IOException {
+    public File downloadImage() throws IOException {
+        // Extract the image's name from the URL
+        String imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+        File destinationFile = new File(destinationFolderPath, imageName+".jpg");
+
         URL url = new URL(imageUrl);
         URLConnection connection = url.openConnection();
+
         try (InputStream inputStream = new BufferedInputStream(connection.getInputStream());
              FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
 
@@ -38,6 +45,8 @@ public class ImageDownloader {
                 outputStream.write(buffer, 0, bytesRead);
             }
         }
+
+        return destinationFile;
     }
 }
 
