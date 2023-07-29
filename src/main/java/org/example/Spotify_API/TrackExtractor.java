@@ -13,8 +13,7 @@ import org.example.Spotify_API.Models.TrackParse;
 import org.example.Spotify_API.Models.metaData;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TrackExtractor {
 
@@ -36,7 +35,11 @@ public class TrackExtractor {
 
 
         metaData data = new metaData();
-        data.setArtistName(track.getAlbum().getArtists().get(0).getName());
+       AtomicReference<String> artists= new AtomicReference<>(" ");
+       track.getAlbum().getArtists().forEach(artist -> {
+           artists.set(artists+" "+artist.getName());
+       });
+        data.setArtistName(artists.get());
         data.setSongName(track.getName());
 
 

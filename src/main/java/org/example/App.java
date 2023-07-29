@@ -28,7 +28,7 @@ public class App {
 
         String accessToken = new SpotifyApiClient().getAccessToken();
         System.out.println("Pls wait getting song data");
-        List<metaData> songs = new PlaylistExtractor().SongsList(accessToken, "37i9dQZF1E36bNx4aBj3BI");
+        List<metaData> songs = new PlaylistExtractor().SongsList(accessToken, "37i9dQZF1DWYfvJNWU1bKi");
         YouTube youtubeService = new YouTubeApiSearch().getService();
         YouTube.Search.List request = youtubeService.search()
                 .list("snippet");
@@ -40,8 +40,8 @@ public class App {
         songs.forEach(song -> {
             try {
                 SearchListResponse response = request.setKey(new YouTubeApiKey().getDEVELOPER_KEY())
-                        .setQ(song.getSongName() + "& Artist - " + song.getArtistName())
-                        .setType("Song|Audio")
+                        .setQ(song.getSongName() + " Artist - " + song.getArtistName())
+                        .setType("video")
                         .execute();
                 List<SearchResult> items = response.getItems();
                 videoIdList.add(items.get(0).getId().getVideoId());

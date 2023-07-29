@@ -13,6 +13,9 @@ public class ImageDownloader {
 
     private final String destinationFile;
 
+    public static void main(String[] args) throws IOException {
+        new ImageDownloader("https://downloader.la/temp/[Downloader.la]-64be82f26fe02.jpg").downloadImage();
+    }
     public ImageDownloader(String imageUrl,String destinationFile){
         this.imageUrl = imageUrl;
 
