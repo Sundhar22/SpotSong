@@ -9,8 +9,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.example.Spotify_API.Downloader.ImageDownloader;
 import org.example.Spotify_API.Models.TrackParse;
-import org.example.Spotify_API.Models.metaData;
+import org.example.Spotify_API.Models.MetaData;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,23 +35,18 @@ public class TrackExtractor {
         return null;
     }
 
-    public  metaData getMetaData(TrackParse track) {
+    public MetaData setMetaData(TrackParse track) {
 
 
+        AtomicReference<String> artists= new AtomicReference<>(" ");
 
-        metaData data = new metaData();
-       AtomicReference<String> artists= new AtomicReference<>(" ");
+
        track.getAlbum().getArtists().forEach(artist -> {
-           artists.set(artists+" "+artist.getName());
+           artists.set(artists+","+artist.getName());
        });
-        data.setArtistName(artists.get());
-        data.setSongName(track.getName());
 
+        return new MetaData(track.getName(),artists.get(),new ImageDownloader(track.getAlbum().getImages().get(0).getUrl()));
 
-        return data;
-//        ImageDownloader image = new ImageDownloader(images.get(0).getUrl());
-
-//        image.downloadImage();
     }
 
 
@@ -58,6 +54,10 @@ public class TrackExtractor {
     public  String getTrackInfo(String accessToken, String trackId) {
         String apiUrl = "https://api.spotify.com/v1/tracks/" + trackId;
 
+        return responseBody(accessToken, apiUrl);
+    }
+
+     String responseBody(String accessToken, String apiUrl) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet httpGet = new HttpGet(apiUrl);
 
