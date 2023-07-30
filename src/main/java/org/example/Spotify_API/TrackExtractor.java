@@ -37,13 +37,29 @@ public class TrackExtractor {
 
     public MetaData setMetaData(TrackParse track) {
 
+        if(track.getName() == "" ){
+
+
+
+            return new MetaData("none","none");
+
+        }
+
 
         AtomicReference<String> artists= new AtomicReference<>("");
 
 
-       track.getAlbum().getArtists().forEach(artist -> {
-           artists.set(artists.get().isEmpty()?artist.getName():artists+","+artist.getName());
-       });
+
+        try {
+            track.getAlbum().getArtists().forEach(artist -> {
+                artists.set(artists.get().isEmpty() ? artist.getName() : artists + "," + artist.getName());
+            });
+        }
+           catch (NullPointerException e){
+               return new MetaData("none","none");
+           }
+
+
 
         return new MetaData(track.getName(),artists.get(),new ImageDownloader(track.getAlbum().getImages().get(0).getUrl()),track.getAlbum().getName());
 

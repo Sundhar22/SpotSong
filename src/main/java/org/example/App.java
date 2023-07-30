@@ -17,6 +17,7 @@ import org.jaudiotagger.tag.TagException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class App {
@@ -27,14 +28,19 @@ public class App {
         String accessToken = new SpotifyApiClient().getAccessToken();
         List<MetaData> songs = new PlaylistExtractor().SongsList(accessToken, "07WB4eklst5yw4hHYLMDgD");
 
+        AtomicInteger i = new AtomicInteger(1);
 
         songs.forEach(song -> {
-            YoutubeSearch searcher = new YoutubeSearch(song);
-            searcher.setDownloadId();
-        });
+            if (song.getSongName() != "none") {
+                YoutubeSearch searcher = new YoutubeSearch(song);
+                searcher.setDownloadId();
+                i.set(i.get() + 1);
+            }});
+
+        System.out.println(i);
 
         for (MetaData song : songs) {
-            if (song.getDownloadId().isEmpty()) {
+            if (song.getSongName() == "none" || song.getDownloadId().isEmpty()) {
                 continue;
             }
             new Downloader(song, new File("D:\\Songs")).downloadAudio();

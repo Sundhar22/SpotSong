@@ -56,14 +56,22 @@ public class PlaylistExtractor {
 
                 for (int i = 0; i < newCount; i++) {
                     assert item != null;
-                    String trackId = item.getItems().get(i).getTrack().getId();
+
+                    try {
+                        String trackId = item.getItems().get(i).getTrack().getId();
+
+                        String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
+
+                        MetaData data = new TrackExtractor().setMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
+
+                        metaDataList.add(data);
+                    }
+                    catch (NullPointerException e){
+                        metaDataList.add(new MetaData("none","none"));
+                    }
 
 
-                    String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-                    MetaData data = new TrackExtractor().setMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
-
-                    metaDataList.add(data);
 
 
                 }
@@ -82,14 +90,20 @@ public class PlaylistExtractor {
 
     private void addMetaData(String accessToken, PlaylistParser playlist, List<MetaData> metaDataList, int trackCount) {
         for (int i = 0; i < trackCount; i++) {
-            String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
+            try {
+                String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
-            String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
+                String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-            MetaData data =new TrackExtractor().setMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
+                MetaData data =new TrackExtractor().setMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
 
-            metaDataList.add(data);
+                metaDataList.add(data);
+            }
+            catch (NullPointerException e){
+                metaDataList.add(new MetaData("none","none"));
+            }
+
 
         }
     }
