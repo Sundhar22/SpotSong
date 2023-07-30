@@ -2,15 +2,8 @@ package org.example.Spotify_API;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.example.Spotify_API.Models.PlaylistParser;
-import org.example.Spotify_API.Models.metaData;
+import org.example.Spotify_API.Models.MetaData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,19 +12,13 @@ import java.util.Objects;
 
 public class PlaylistExtractor {
 
-    private List<metaData> metaDataList = new ArrayList<>();
-
-    private String accessToken;
-
-    public List<metaData> SongsList(String accessToken, String playListId) throws IOException {
-
-        this.accessToken = accessToken;
+    public List<MetaData> SongsList(String accessToken, String playListId) throws IOException {
 
         String PlaylistTracks = getPlaylistTracks(accessToken, playListId);
 
         PlaylistParser playlist = extractPlaylistInfo(PlaylistTracks);
 
-
+        List<MetaData> metaDataList = new ArrayList<>();
 
         assert playlist != null;
         int trackCount = playlist.getTracks().getTotal();
@@ -39,11 +26,9 @@ public class PlaylistExtractor {
         int limitCount = playlist.getTracks().getLimit();
 
         if (trackCount <= limitCount) {
-
-            addMetaData(playlist,trackCount);
-
+            addMetaData(accessToken, playlist, metaDataList, trackCount);
         } else {
-            addMetaData(playlist,limitCount);
+            addMetaData(accessToken, playlist, metaDataList, limitCount);
 
             String nextURL = playlist.getTracks().getNext();
 
@@ -76,7 +61,7 @@ public class PlaylistExtractor {
 
                     String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-                    metaData data = new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
+                    MetaData data = new TrackExtractor().setMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
 
                     metaDataList.add(data);
 
@@ -95,17 +80,16 @@ public class PlaylistExtractor {
 
     }
 
-    private void addMetaData( PlaylistParser playlist,int count) throws IOException {
-        for (int i = 0; i < count; i++) {
+    private void addMetaData(String accessToken, PlaylistParser playlist, List<MetaData> metaDataList, int trackCount) {
+        for (int i = 0; i < trackCount; i++) {
             String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
 
             String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
 
-            metaData data =new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
+            MetaData data =new TrackExtractor().setMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
 
             metaDataList.add(data);
-
 
         }
     }
@@ -137,47 +121,12 @@ public class PlaylistExtractor {
     private String getPlaylistTracks(String accessToken, String playListId) {
         String apiUrl = "https://api.spotify.com/v1/playlists/" + playListId;
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet(apiUrl);
-
-            // Set the Authorization header with the access token
-            httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-
-            HttpResponse response = httpClient.execute(httpGet);
-
-            HttpEntity entity = response.getEntity();
-
-            if (entity != null) {
-                return EntityUtils.toString(entity);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return new TrackExtractor().responseBody(accessToken, apiUrl);
     }
 
     private String getNextPlaylistTrack(String accessToken, String url) {
 
-        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet(url);
-
-            // Set the Authorization header with the access token
-            httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-
-            HttpResponse response = httpClient.execute(httpGet);
-
-            HttpEntity entity = response.getEntity();
-
-            if (entity != null) {
-                //System.out.println(responseBody);
-                return EntityUtils.toString(entity);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return new TrackExtractor().responseBody(accessToken, url);
     }
 
 }
