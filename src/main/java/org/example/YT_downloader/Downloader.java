@@ -11,6 +11,11 @@ import com.github.kiulian.downloader.model.videos.formats.Format;
 import org.example.Spotify_API.Downloader.ImageDownloader;
 import org.example.Spotify_API.Downloader.SongDetailsAdder;
 import org.example.Spotify_API.Models.MetaData;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.CannotWriteException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +54,7 @@ public class Downloader {
     }
 
 
-    public void downloadAudio() throws IOException {
+    public void downloadAudio() throws IOException, CannotWriteException, CannotReadException, TagException, InvalidAudioFrameException,  ReadOnlyFileException{
         RequestVideoFileDownload request3 = new RequestVideoFileDownload(Aformat)
                 .callback(new YoutubeProgressCallback<File>() {
                     @Override
@@ -75,6 +80,6 @@ public class Downloader {
         Response<File> response3 = downloader.downloadVideoFile(request3);
         File data = response3.data();
       File imageFile=  new ImageDownloader(_song.getImageUrl().getImageUrl()).downloadImage();
-        new SongDetailsAdder(data,imageFile).add();
+        new SongDetailsAdder(data,imageFile, _song.getArtistName(), _song.getAlbumName()).add();
     }
 }

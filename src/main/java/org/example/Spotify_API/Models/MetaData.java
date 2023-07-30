@@ -3,17 +3,24 @@ package org.example.Spotify_API.Models;
 import org.example.Spotify_API.Downloader.ImageDownloader;
 
 public class MetaData {
-    private  String songName;
+    private final String songName;
 
-    private  String artistName;
+
+    private final String artistName;
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    private  String albumName;
 
     private ImageDownloader imageUrl;
 
-    public MetaData(String songName, String artistName, ImageDownloader imageUrl) {
+    public MetaData(String songName, String artistName, ImageDownloader imageUrl,String albumName) {
         this.songName = songName;
         this.artistName = artistName;
-        this.imageUrl = imageUrl;
-        
+        this.imageUrl = imageUrl;this.albumName=albumName;
+
     }
 
     public ImageDownloader getImageUrl() {

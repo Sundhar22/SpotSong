@@ -10,8 +10,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.example.Spotify_API.Downloader.ImageDownloader;
-import org.example.Spotify_API.Models.TrackParse;
 import org.example.Spotify_API.Models.MetaData;
+import org.example.Spotify_API.Models.TrackParse;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -38,14 +38,14 @@ public class TrackExtractor {
     public MetaData setMetaData(TrackParse track) {
 
 
-        AtomicReference<String> artists= new AtomicReference<>(" ");
+        AtomicReference<String> artists= new AtomicReference<>("");
 
 
        track.getAlbum().getArtists().forEach(artist -> {
-           artists.set(artists+","+artist.getName());
+           artists.set(artists.get().isEmpty()?artist.getName():artists+","+artist.getName());
        });
 
-        return new MetaData(track.getName(),artists.get(),new ImageDownloader(track.getAlbum().getImages().get(0).getUrl()));
+        return new MetaData(track.getName(),artists.get(),new ImageDownloader(track.getAlbum().getImages().get(0).getUrl()),track.getAlbum().getName());
 
     }
 

@@ -1,4 +1,4 @@
-package org.example.YT_API;
+package org.example.YT;
 
 import com.github.kiulian.downloader.YoutubeDownloader;
 import com.github.kiulian.downloader.downloader.request.RequestSearchResult;
@@ -26,7 +26,7 @@ public class YoutubeSearch {
 
     public void setDownloadId() {
 
-        RequestSearchResult request = new RequestSearchResult(_song.getSongName() + " by " + _song.getArtistName())
+        RequestSearchResult request = new RequestSearchResult(_song.getSongName()+" lyrics" + " by " + _song.getArtistName())
                 .type(TypeField.VIDEO);
 
         SearchResult result = downloader.search(request).data();
