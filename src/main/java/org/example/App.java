@@ -8,11 +8,7 @@ import org.example.Spotify_API.SpotifyApiClient;
 
 import org.example.YT_API.YoutubeSearch;
 import org.example.YT_downloader.Downloader;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.TagException;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +18,7 @@ import java.util.List;
 
 
 public class App {
-    public static void main(String[] args) throws GeneralSecurityException, IOException, GoogleJsonResponseException, CannotWriteException, CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException {
+    public static void main(String[] args) throws GeneralSecurityException, IOException, GoogleJsonResponseException{
 
         String accessToken = new SpotifyApiClient().getAccessToken();
         System.out.println("Pls wait getting song data");

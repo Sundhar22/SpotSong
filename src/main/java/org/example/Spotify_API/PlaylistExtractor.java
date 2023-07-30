@@ -19,13 +19,19 @@ import java.util.Objects;
 
 public class PlaylistExtractor {
 
+    private List<metaData> metaDataList = new ArrayList<>();
+
+    private String accessToken;
+
     public List<metaData> SongsList(String accessToken, String playListId) throws IOException {
+
+        this.accessToken = accessToken;
 
         String PlaylistTracks = getPlaylistTracks(accessToken, playListId);
 
         PlaylistParser playlist = extractPlaylistInfo(PlaylistTracks);
 
-        List<metaData> metaDataList = new ArrayList<>();
+
 
         assert playlist != null;
         int trackCount = playlist.getTracks().getTotal();
@@ -33,31 +39,11 @@ public class PlaylistExtractor {
         int limitCount = playlist.getTracks().getLimit();
 
         if (trackCount <= limitCount) {
-            for (int i = 0; i < trackCount; i++) {
-                String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
 
+            addMetaData(playlist,trackCount);
 
-                String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
-
-                metaData data =new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
-
-                metaDataList.add(data);
-
-
-            }
         } else {
-            for (int i = 0; i < limitCount; i++) {
-                String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
-
-
-                String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
-
-                metaData data = new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
-
-                metaDataList.add(data);
-
-
-            }
+            addMetaData(playlist,limitCount);
 
             String nextURL = playlist.getTracks().getNext();
 
@@ -107,6 +93,21 @@ public class PlaylistExtractor {
         }
         return metaDataList;
 
+    }
+
+    private void addMetaData( PlaylistParser playlist,int count) throws IOException {
+        for (int i = 0; i < count; i++) {
+            String trackId = playlist.getTracks().getItems().get(i).getTrack().getId();
+
+
+            String trackInfo = new TrackExtractor().getTrackInfo(accessToken, trackId);
+
+            metaData data =new TrackExtractor().getMetaData(Objects.requireNonNull(new TrackExtractor().extractTrackInfo(trackInfo)));
+
+            metaDataList.add(data);
+
+
+        }
     }
 
     private PlaylistParser extractPlaylistInfo(String responseBody) {

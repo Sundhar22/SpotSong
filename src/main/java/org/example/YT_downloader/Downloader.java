@@ -12,15 +12,7 @@ import com.github.kiulian.downloader.model.videos.formats.Format;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import org.jaudiotagger.audio.AudioFile;
-import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.CannotWriteException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
+
 
 
 public class Downloader {
@@ -59,7 +51,7 @@ public class Downloader {
     }
 
 
-   public void downloadAudio() throws CannotReadException, TagException, InvalidAudioFrameException, ReadOnlyFileException, IOException, CannotWriteException {
+   public void downloadAudio() throws  IOException {
        RequestVideoFileDownload request3 = new RequestVideoFileDownload(Aformat)
                .callback(new YoutubeProgressCallback<File>() {
                    @Override
@@ -84,6 +76,10 @@ public class Downloader {
                .async();
        Response<File> response3 = downloader.downloadVideoFile(request3);
        File data = response3.data();
+       System.out.println(data);
 
+   }
+   public static void main(String[] args) throws IOException {
+       new Downloader("RzmZmaQtxls", new File("D:\\Songs"), "", "").downloadAudio();
    }
 }
