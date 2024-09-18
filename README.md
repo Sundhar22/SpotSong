@@ -53,7 +53,7 @@ SpotSong is a Java-based application that allows users to download songs from Sp
 ## Dependencies
 
 - [Spotify Web API](https://developer.spotify.com/documentation/web-api/)
-- [YouTube Downloader](https://github.com/yt-dlp/yt-dlp)
+- [YouTube Downloader](https://github.com/TechPro424/JavaYTDL)
 - [Maven](https://maven.apache.org/)
 
 ## License
